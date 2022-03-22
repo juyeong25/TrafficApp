@@ -439,7 +439,6 @@ const GroupEditPage = () => {
                             location_routerIp: targetMap.location_routerIp,
                             location_lcIp: targetMap.location_lcIp,
                         }
-                        console.log(_data)
                         patchMapDataUpdateAPI(_data, parseInt(targetMap.location_id)).then(()=>{
                             getGroupList().catch((e)=>{console.error(e)})
                             swal.fire({
@@ -577,7 +576,7 @@ const GroupEditPage = () => {
         }else {
             swal.fire({
                 icon: 'warning',
-                text: '비어있는 영역이 존재합니다.'
+                text: '비어있는 데이터가 있습니다.'
             })
         }
 

@@ -12,7 +12,6 @@ const DetectConfig = () => {
     const [groupList, setGroupList] = useState([])
     const [groupIndex, setGroupIndex] = useState(1)
     const [mapList, setMapList] = useState([])
-    const [mapIndex, setMapIndex] =useState(1)
 
     const [detectorData32, setDetectorData32] = useState([])
     const [detectorData64, setDetectorData64] = useState([])
@@ -87,11 +86,9 @@ const DetectConfig = () => {
     }
 
     const updateGroupIndex = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
+        setGroupIndex(content.target.value)
     }
-    const updateMapIndex = (content) =>{
-        setMapIndex(content.target.selectedIndex + 1)
-    }
+
     const thStyle = { borderBottom: '1px solid #EBEBEB', backgroundColor: '#F7F9FC', height: '24px', fontSize: '13px', borderRight: '1px solid #EBEBEB',}
     const tdStyle = { height: '24px', fontSize: '13px', borderBottom: '1px solid #EBEBEB', borderRight: '1px solid #EBEBEB' }
     const inputStyle = {width:'60px'}
@@ -189,11 +186,13 @@ const DetectConfig = () => {
     }
 
     const detectorData32UploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setDetectorData32([])
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xC6])
         funcSwal();
     }
     const detectorData64UploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setDetectorData64([])
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xCC])
         funcSwal();
@@ -208,13 +207,13 @@ const DetectConfig = () => {
                         <h4>그룹</h4>
                         <select onChange={updateGroupIndex.bind()}>
                             {groupList.map((item, index)=>(
-                                <option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>
+                                <option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>
                             ))}
                         </select>
                         <h4>교차로</h4>
-                        <select onChange={updateMapIndex.bind()}>
+                        <select id={'location_id'}>
                             {mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                                <option key={'map-list-option-'+index}>{item.location_id}번 {item.location_name}</option>
+                                <option key={'map-list-option-'+index} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                             ))}
                         </select>
                     </div>
@@ -243,16 +242,16 @@ const DetectConfig = () => {
                                         <col width={'12%'}/>
                                     </colgroup>
                                     <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>타입</th>
-                                            <th>방향</th>
-                                            <th>위치(m)</th>
-                                            <th>차로</th>
-                                            <th>용도</th>
-                                            <th>RING</th>
-                                            <th>현시</th>
-                                        </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th>타입</th>
+                                        <th>방향</th>
+                                        <th>위치(m)</th>
+                                        <th>차로</th>
+                                        <th>용도</th>
+                                        <th>RING</th>
+                                        <th>현시</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                     {createTable(1, 'A')}
@@ -312,7 +311,7 @@ const DetectConfig = () => {
                 display: flex;
                 align-items: center;
               }
-               select {
+              select {
                 margin: 0px 5px;
                 border-radius: 4px;
                 color: #707070;
@@ -354,7 +353,7 @@ const DetectConfig = () => {
                 font-size: 13px;
               }
               th:not(:last-child), td:not(:last-child){
-                 border-right: 1px solid #EBEBEB;
+                border-right: 1px solid #EBEBEB;
               }
               td{
                 height: 24px;

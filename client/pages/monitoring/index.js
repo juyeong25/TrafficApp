@@ -17,7 +17,7 @@ ChartJS.register(
     ChartDataLabels
 )
 
-const socket =  io.connect('http://192.168.1.182:9000/') //'http://14.51.232.120:9000/' 'http://localhost:9000/'
+const socket =  io.connect('http://192.168.1.182:9000/')
 let naverMap = null
 const Monitoring = (props) => {
 

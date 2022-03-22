@@ -22,7 +22,6 @@ const Operationlog = () => {
     //selectBox
     const [groupIndex, setGroupIndex] = useState(1)
     const [groupList, setGroupList] = useState([])
-    const [mapIndex, setMapIndex] = useState(1)
     const [mapList, setMapList] = useState([])
     //data
     const [logData, setLogData] = useState([])
@@ -36,18 +35,16 @@ const Operationlog = () => {
     useEffect(()=>{
         setMaxIndex(Math.ceil(logData.length/24))
     },[logData])
-    useEffect(()=>{},[mapIndex])
 
     //select box
     const setGroupEvent = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
+        setGroupIndex(content.target.value)
     }
-    const setIntersectionEvent = (content) => {
-        setMapIndex(content.target.selectedIndex + 1)
-    }
+
     //조회버튼 이벤트
     async function getOperationLogList(){
         try{
+            const mapIndex = parseInt(document.getElementById('location_id').value)
             const url = 'http://192.168.1.43:3001/cycle-log/'+DateToString(targetDate)+'/'+DateToString(targetDate)+'/'+mapIndex+'/listAll'
             const response = await axios.get(url)
             console.log(url)
@@ -156,7 +153,7 @@ const Operationlog = () => {
                         <td>{logData[i].ped_6}</td>
                         <td>{logData[i].ped_7}</td>
                         <td>{logData[i].ped_8}</td>
-                </tr>)
+                    </tr>)
             }
         }else {
             for(let i = startNumber; i < startNumber + 24 ; i++){
@@ -183,7 +180,7 @@ const Operationlog = () => {
                         <td>{logData[i].ped_7}</td>
                         <td>{logData[i].ped_8}</td>
                     </tr>
-                    )
+                )
             }
         }
         return trs
@@ -295,12 +292,13 @@ const Operationlog = () => {
     };
 
     const exportCSVData = () =>{
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         let text = ''
         text += 'no,log_time,id,cycle,offset,split_1,split_2,split_3,split_4,split_5,split_6,split_7,split_8,ped_1,ped_2,ped_3,ped_4,ped_5,ped_6,ped_7,ped_8\r\n'
         logData.map((item, index)=>{
             text+=(index+1)+','+item.log_time+','+mapIndex+','+item.cycle+','+item.offset_value+','
-            +item.split_1+','+item.split_2+','+item.split_3+','+item.split_4+','+item.split_5+','+item.split_6+','+item.split_7+','+item.split_8+','
-            +item.ped_1+','+item.ped_2+','+item.ped_3+','+item.ped_4+','+item.ped_5+','+item.ped_6+','+item.ped_7+','+item.ped_8+'\r\n'
+                +item.split_1+','+item.split_2+','+item.split_3+','+item.split_4+','+item.split_5+','+item.split_6+','+item.split_7+','+item.split_8+','
+                +item.ped_1+','+item.ped_2+','+item.ped_3+','+item.ped_4+','+item.ped_5+','+item.ped_6+','+item.ped_7+','+item.ped_8+'\r\n'
         })
         const downloadLink = document.createElement('a')
         const blob = new Blob([text], {type:'text/csv;charset=utf-8'})
@@ -338,12 +336,12 @@ const Operationlog = () => {
                     <div key={'startDatePicker'}> <DatePickerButton startpicker={'true'} start_date={targetDate} date_update={setTargetDate}/> </div>
                     <h4>그룹</h4>
                     <select className={'group-select-box'} onChange={setGroupEvent}>{
-                        groupList.map((item, index)=>(<option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>))
+                        groupList.map((item, index)=>(<option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>))
                     }</select>
                     <h4>교차로</h4>
-                    <select className={'intersection-select-box'} onChange={setIntersectionEvent}>{
+                    <select className={'intersection-select-box'} id={'location_id'}>{
                         mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                            <option key={'map-list-option-'+index}>{item.location_id}번 {item.location_name}</option>
+                            <option key={'map-list-option-'+index} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                         ))
                     }</select>
                     <button onClick={getOperationLogList}>조회</button>
@@ -357,32 +355,32 @@ const Operationlog = () => {
                         <div className={'data-table-item'}>
                             <table className={'data-list'}>
                                 <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>로그 시간</th>
-                                        <th>Cycle</th>
-                                        <th>offset</th>
-                                        <th>split_1</th>
-                                        <th>split_2</th>
-                                        <th>split_3</th>
-                                        <th>split_4</th>
-                                        <th>split_5</th>
-                                        <th>split_6</th>
-                                        <th>split_7</th>
-                                        <th>split_8</th>
-                                        <th>pad_1</th>
-                                        <th>pad_2</th>
-                                        <th>pad_3</th>
-                                        <th>pad_4</th>
-                                        <th>pad_5</th>
-                                        <th>pad_6</th>
-                                        <th>pad_7</th>
-                                        <th>pad_8</th>
-                                    </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>로그 시간</th>
+                                    <th>Cycle</th>
+                                    <th>offset</th>
+                                    <th>split_1</th>
+                                    <th>split_2</th>
+                                    <th>split_3</th>
+                                    <th>split_4</th>
+                                    <th>split_5</th>
+                                    <th>split_6</th>
+                                    <th>split_7</th>
+                                    <th>split_8</th>
+                                    <th>pad_1</th>
+                                    <th>pad_2</th>
+                                    <th>pad_3</th>
+                                    <th>pad_4</th>
+                                    <th>pad_5</th>
+                                    <th>pad_6</th>
+                                    <th>pad_7</th>
+                                    <th>pad_8</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                   {/*데이터를 불러와서 그릴 공간*/}
-                                   {logData ? setDataTable() : null}
+                                {/*데이터를 불러와서 그릴 공간*/}
+                                {logData ? setDataTable() : null}
                                 </tbody>
                             </table>
                         </div>
@@ -432,7 +430,7 @@ const Operationlog = () => {
                 box-shadow: 2px 2px .1px #DADBDE inset;
                 padding: 20px;
               }
-              
+
               .content .data-table-container table{
                 color: #707070;
                 text-align: center;

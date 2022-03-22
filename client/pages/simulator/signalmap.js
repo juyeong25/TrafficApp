@@ -11,7 +11,6 @@ const SignalMap = () => {
     const [groupList, setGroupList] = useState([])
     const [groupIndex, setGroupIndex] = useState(1)
     const [mapList, setMapList] = useState([])
-    const [mapIndex, setMapIndex] =useState(1)
     const [detectorType, setDetectorType] = useState(3)
 
     const [signalMapA, setSignalMapA] = useState([])
@@ -98,6 +97,7 @@ const SignalMap = () => {
     }
 
     const signalMapUploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setSignalMapA([])
         setSignalMapB([])
         const signalMap_mapIndex = document.getElementById('signal-map-type-select').selectedIndex.toString(2).padStart(4, '0')
@@ -108,6 +108,7 @@ const SignalMap = () => {
         funcSwal()
     }
     const flashMapUploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setFlashMap([])
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xC2])
         funcSwal()
@@ -349,10 +350,7 @@ const SignalMap = () => {
     }
 
     const updateGroupIndex = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
-    }
-    const updateMapIndex = (content) =>{
-        setMapIndex(content.target.selectedIndex + 1)
+        setGroupIndex(content.target.value)
     }
 
     //table style
@@ -658,7 +656,7 @@ const SignalMap = () => {
             default: break
         }
     }
-    
+
     return (
         <>
             <div className={'simulator'}>
@@ -668,13 +666,13 @@ const SignalMap = () => {
                         <h4>그룹</h4>
                         <select onChange={updateGroupIndex.bind()}>
                             {groupList.map((item, index)=>(
-                                <option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>
+                                <option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>
                             ))}
                         </select>
                         <h4>교차로</h4>
-                        <select onChange={updateMapIndex.bind()}>
+                        <select id={'location_id'}>
                             {mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                                <option key={'map-list-option-'+index}>{item.location_id}번 {item.location_name}</option>
+                                <option key={'map-list-option-'+index} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                             ))}
                         </select>
                     </div>

@@ -32,7 +32,6 @@ const Detectlog = () => {
     //selectBox
     const [groupIndex, setGroupIndex] = useState(1)
     const [groupList, setGroupList] = useState([])
-    const [mapIndex, setMapIndex] = useState(1)
     const [mapList, setMapList] = useState([])
     //data
     const [logData, setLogData] = useState([])
@@ -46,19 +45,16 @@ const Detectlog = () => {
     useEffect(()=>{
         setMaxIndex(Math.ceil(logData.length/24))
     },[logData])
-    useEffect(()=>{},[mapIndex])
     useEffect(()=>{},[pageIndex])
 
     //select box
     const setGroupEvent = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
-    }
-    const setIntersectionEvent = (content) => {
-        setMapIndex(content.target.options[content.target.selectedIndex].id)
+        setGroupIndex(content.target.value)
     }
     //조회버튼 이벤트
     async function getDetectLogList(){
         try{
+            const mapIndex = parseInt(document.getElementById('location_id').value)
             const url = 'http://192.168.1.43:3001/detect-log/'+DateToString(startDate)+'/'+DateToString(endDate)+'/'+mapIndex+'/listAll'
             const response = await axios.get(url)
             setLogData(response.data)
@@ -305,6 +301,7 @@ const Detectlog = () => {
     }
 
     const exportCSVData = () =>{
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         let text = ''
         text += 'no,log_time,id,vol_1,vol_2,vol_3,vol_4,occ_1,occ_2,occ_3,occ_4\r\n'
         logData.map((item, index)=>{
@@ -349,12 +346,12 @@ const Detectlog = () => {
                     <div key={'endDatePicker'}> <DatePickerButton startpicker={'false'} start_date={startDate} end_date={endDate} min_date={startDate} date_update={setEndDate}/> </div>
                     <h4>그룹</h4>
                     <select className={'group-select-box'} onChange={setGroupEvent}>{
-                        groupList.map((item, index)=>(<option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>))
+                        groupList.map((item, index)=>(<option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>))
                     }</select>
                     <h4>교차로</h4>
-                    <select className={'intersection-select-box'} onChange={setIntersectionEvent}>{
+                    <select className={'intersection-select-box'} id={'location_id'}>{
                         mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                            <option key={'map-list-option-'+index} id={item.location_id}>{item.location_id}번 {item.location_name}</option>
+                            <option key={'map-list-option-'+index} id={item.location_id} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                         ))
                     }</select>
                     <button onClick={getDetectLogList}>조회</button>
@@ -368,18 +365,18 @@ const Detectlog = () => {
                         <div className={'data-table'}>
                             <table className={'data-list'}>
                                 <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>로그시간</th>
-                                        <th>vol_1</th>
-                                        <th>occ_1</th>
-                                        <th>vol_2</th>
-                                        <th>occ_2</th>
-                                        <th>vol_3</th>
-                                        <th>occ_3</th>
-                                        <th>vol_4</th>
-                                        <th>occ_4</th>
-                                    </tr>
+                                <tr>
+                                    <th>No</th>
+                                    <th>로그시간</th>
+                                    <th>vol_1</th>
+                                    <th>occ_1</th>
+                                    <th>vol_2</th>
+                                    <th>occ_2</th>
+                                    <th>vol_3</th>
+                                    <th>occ_3</th>
+                                    <th>vol_4</th>
+                                    <th>occ_4</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 {setDataTable()}
@@ -450,7 +447,7 @@ const Detectlog = () => {
                 box-shadow: 2px 2px .1px #DADBDE inset;
                 padding: 20px;
               }
-              
+
             `}</style>
         </>
     );

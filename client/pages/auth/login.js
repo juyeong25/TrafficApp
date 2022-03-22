@@ -39,7 +39,7 @@ function Login(props) {
                     window.location.href = '/monitoring'
                 })
         }else {
-            await swal("Failed", 'ㅠ_ㅠ', "error");
+            await swal.fire("Failed", 'ㅠ_ㅠ', "error");
         }
     }
 

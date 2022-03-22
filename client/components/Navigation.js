@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {useRouter} from "next/router";
-import Image from "next/image";
 import {useEffect} from "react";
 
 const Navigation = (props) => {
@@ -47,8 +46,6 @@ const Navigation = (props) => {
                 props.onPushEvent( e.target.innerText, e.target.href)
             })
         }
-
-
     },[])
 
     return (

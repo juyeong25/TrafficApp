@@ -12,7 +12,6 @@ const StartUpCode = () => {
     const [groupList, setGroupList] = useState([])
     const [groupIndex, setGroupIndex] = useState(1)
     const [mapList, setMapList] = useState([])
-    const [mapIndex, setMapIndex] =useState(1)
 
     const [startUpCode, setStartUpCode] = useState([])
     const [functionCode, setFunctionCode] = useState([])
@@ -151,11 +150,13 @@ const StartUpCode = () => {
     }
 
     const startupCodeUploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setStartUpCode([])
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xA2])
         funcSwal();
     }
     const functionCodeUploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         setFunctionCode([])
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xB6])
         funcSwal();
@@ -166,11 +167,9 @@ const StartUpCode = () => {
     }
 
     const updateGroupIndex = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
+        setGroupIndex(content.target.value)
     }
-    const updateMapIndex = (content) =>{
-        setMapIndex(content.target.selectedIndex + 1)
-    }
+
     const thStyle = { borderBottom: '1px solid #EBEBEB', backgroundColor: '#F7F9FC', height: '15px', fontSize: '13px', borderRight: '1px solid #EBEBEB',}
     const tdStyle = { height: '15px', fontSize: '13px', borderBottom: '1px solid #EBEBEB', borderRight: '1px solid #EBEBEB' }
     const labelStyle = {lineHeight: '20px',}
@@ -280,13 +279,13 @@ const StartUpCode = () => {
                         <h4>그룹</h4>
                         <select onChange={updateGroupIndex.bind()}>
                             {groupList.map((item, index)=>(
-                                <option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>
+                                <option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>
                             ))}
                         </select>
                         <h4>교차로</h4>
-                        <select onChange={updateMapIndex.bind()}>
+                        <select id={'location_id'}>
                             {mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                                <option key={'map-list-option-'+index}>{item.location_id}번 {item.location_name}</option>
+                                <option key={'map-list-option-'+index} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                             ))}
                         </select>
                     </div>
@@ -305,70 +304,70 @@ const StartUpCode = () => {
                             <div className={'startup-code-table'}>
                                 <table>
                                     <thead>
-                                        <tr>
-                                            <th colSpan={5}>RING 운영 방법</th>
-                                            <th colSpan={2}>주현시 지정</th>
-                                        </tr>
-                                        <tr>
-                                            <th>모드</th>
-                                            <th>앞막힘수행</th>
-                                            <th>앞막힘처리</th>
-                                            <th>듀얼시간차</th>
-                                            <th>현시생략</th>
-                                            <th>주현시</th>
-                                            <th>감응여부</th>
-                                        </tr>
+                                    <tr>
+                                        <th colSpan={5}>RING 운영 방법</th>
+                                        <th colSpan={2}>주현시 지정</th>
+                                    </tr>
+                                    <tr>
+                                        <th>모드</th>
+                                        <th>앞막힘수행</th>
+                                        <th>앞막힘처리</th>
+                                        <th>듀얼시간차</th>
+                                        <th>현시생략</th>
+                                        <th>주현시</th>
+                                        <th>감응여부</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <select>
-                                                    <option>싱글</option><option>듀얼</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option><option>MG무시</option><option>MG유지</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>출력마스크</option><option>현시진행</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type={'number'}/>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option><option>허용</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type={'number'}/>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option><option>GAP</option><option>한계손실</option><option>GAP+감응</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <select>
+                                                <option>싱글</option><option>듀얼</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option><option>MG무시</option><option>MG유지</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>출력마스크</option><option>현시진행</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type={'number'}/>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option><option>허용</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type={'number'}/>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option><option>GAP</option><option>한계손실</option><option>GAP+감응</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                                 <table>
                                     <thead>
-                                        <tr>
-                                            <th>시차제 주현시</th>
-                                            <th>GAP 감응 시간값</th>
-                                            <th>한계손실 감응 시간값</th>
-                                        </tr>
+                                    <tr>
+                                        <th>시차제 주현시</th>
+                                        <th>GAP 감응 시간값</th>
+                                        <th>한계손실 감응 시간값</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><input type={'number'} /></td>
-                                            <td><input type={'number'} /></td>
-                                            <td><input type={'number'} /></td>
-                                        </tr>
+                                    <tr>
+                                        <td><input type={'number'} /></td>
+                                        <td><input type={'number'} /></td>
+                                        <td><input type={'number'} /></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                                 <h5>DUAL 운영현시지정</h5>
@@ -396,16 +395,16 @@ const StartUpCode = () => {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><select><option>MG유지</option><option>MG무시</option></select></td>
-                                            <td><select><option>단선</option><option>전체</option></select></td>
-                                            <td><select><option>지속</option><option>해지</option></select></td>
-                                            <td><select><option>보행맵</option><option>운영맵</option></select></td>
-                                            <td><select><option>해당현시</option><option>한주기만</option></select></td>
-                                            <td><select><option>유지</option><option>전감응</option></select></td>
-                                            <td><select><option>현시</option><option>종결</option></select></td>
-                                            <td><select><option>리셋 후</option><option>다음주기</option></select></td>
-                                        </tr>
+                                    <tr>
+                                        <td><select><option>MG유지</option><option>MG무시</option></select></td>
+                                        <td><select><option>단선</option><option>전체</option></select></td>
+                                        <td><select><option>지속</option><option>해지</option></select></td>
+                                        <td><select><option>보행맵</option><option>운영맵</option></select></td>
+                                        <td><select><option>해당현시</option><option>한주기만</option></select></td>
+                                        <td><select><option>유지</option><option>전감응</option></select></td>
+                                        <td><select><option>현시</option><option>종결</option></select></td>
+                                        <td><select><option>리셋 후</option><option>다음주기</option></select></td>
+                                    </tr>
                                     </tbody>
                                 </table>
                                 <h5>시차제좌회전 DUAL 운영현시지정</h5>
@@ -428,106 +427,106 @@ const StartUpCode = () => {
                                 <h5>긴급/UPS 제어옵션</h5>
                                 <table>
                                     <thead>
-                                        <tr>
-                                            <th>긴급차량</th><th>긴급현시점프</th><th>버스우선</th><th>UPS시험</th><th>정전 조광</th><th>정전 점멸</th>
-                                        </tr>
+                                    <tr>
+                                        <th>긴급차량</th><th>긴급현시점프</th><th>버스우선</th><th>UPS시험</th><th>정전 조광</th><th>정전 점멸</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <select><option>---</option><option>허용</option></select>
-                                            </td>
-                                            <td>
-                                                <select><option>---</option><option>허용</option></select>
-                                            </td>
-                                            <td>
-                                                <select><option>---</option><option>허용</option></select>
-                                            </td>
-                                            <td>
-                                                <select><option>---</option><option>실행</option></select>
-                                            </td>
-                                            <td>
-                                                <select><option>조광</option><option>정상</option></select>
-                                            </td>
-                                            <td>
-                                                <select><option>정상</option><option>점멸</option></select>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <select><option>---</option><option>허용</option></select>
+                                        </td>
+                                        <td>
+                                            <select><option>---</option><option>허용</option></select>
+                                        </td>
+                                        <td>
+                                            <select><option>---</option><option>허용</option></select>
+                                        </td>
+                                        <td>
+                                            <select><option>---</option><option>실행</option></select>
+                                        </td>
+                                        <td>
+                                            <select><option>조광</option><option>정상</option></select>
+                                        </td>
+                                        <td>
+                                            <select><option>정상</option><option>점멸</option></select>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                                 <h5>보행자 버튼 입력장치</h5>
                                 <table>
                                     <thead>
-                                        <tr>
-                                            <th rowSpan={2}>음성출력간격</th>
-                                            <th colSpan={2}>음량 설정</th>
-                                            <th rowSpan={2}>시각장애인 음향</th>
-                                            <th colSpan={2}>심야시간 설정</th>
-                                        </tr>
-                                        <tr>
-                                            <th>주간</th>
-                                            <th>심야</th>
-                                            <th>시작</th>
-                                            <th>종료</th>
-                                        </tr>
+                                    <tr>
+                                        <th rowSpan={2}>음성출력간격</th>
+                                        <th colSpan={2}>음량 설정</th>
+                                        <th rowSpan={2}>시각장애인 음향</th>
+                                        <th colSpan={2}>심야시간 설정</th>
+                                    </tr>
+                                    <tr>
+                                        <th>주간</th>
+                                        <th>심야</th>
+                                        <th>시작</th>
+                                        <th>종료</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <select>
-                                                    <option>자동</option>
-                                                    <option>15초</option>
-                                                    <option>30초</option>
-                                                    <option>45초</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>소거</option>
-                                                    <option>50%</option>
-                                                    <option>75%</option>
-                                                    <option>100%</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>소거</option>
-                                                    <option>25%</option>
-                                                    <option>50%</option>
-                                                    <option>75%</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>억제</option>
-                                                    <option>발생</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>미사용</option>
-                                                    <option>18:00</option>
-                                                    <option>19:00</option>
-                                                    <option>20:00</option>
-                                                    <option>21:00</option>
-                                                    <option>22:00</option>
-                                                    <option>23:00</option>
-                                                    <option>24:00</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>미사용</option>
-                                                    <option>04:00</option>
-                                                    <option>05:00</option>
-                                                    <option>06:00</option>
-                                                    <option>07:00</option>
-                                                    <option>08:00</option>
-                                                    <option>09:00</option>
-                                                    <option>10:00</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td>
+                                            <select>
+                                                <option>자동</option>
+                                                <option>15초</option>
+                                                <option>30초</option>
+                                                <option>45초</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>소거</option>
+                                                <option>50%</option>
+                                                <option>75%</option>
+                                                <option>100%</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>소거</option>
+                                                <option>25%</option>
+                                                <option>50%</option>
+                                                <option>75%</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>억제</option>
+                                                <option>발생</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>미사용</option>
+                                                <option>18:00</option>
+                                                <option>19:00</option>
+                                                <option>20:00</option>
+                                                <option>21:00</option>
+                                                <option>22:00</option>
+                                                <option>23:00</option>
+                                                <option>24:00</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>미사용</option>
+                                                <option>04:00</option>
+                                                <option>05:00</option>
+                                                <option>06:00</option>
+                                                <option>07:00</option>
+                                                <option>08:00</option>
+                                                <option>09:00</option>
+                                                <option>10:00</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -546,514 +545,514 @@ const StartUpCode = () => {
                             <div className={'function-code-table'}>
                                 <table>
                                     <thead>
-                                        <tr>
-                                            <th rowSpan={2} style={{width: '40px'}}></th>
-                                            <th rowSpan={2}>월</th>
-                                            <th rowSpan={2}>일</th>
-                                            <th rowSpan={2}>주</th>
-                                            <th colSpan={2}>시작</th>
-                                            <th colSpan={2}>종료</th>
-                                            <th rowSpan={2}>플랜</th>
-                                            <th rowSpan={2}>FUNCTION</th>
-                                        </tr>
-                                        <tr>
-                                            <th>시</th>
-                                            <th>분</th>
-                                            <th>시</th>
-                                            <th>분</th>
-                                        </tr>
+                                    <tr>
+                                        <th rowSpan={2} style={{width: '40px'}}></th>
+                                        <th rowSpan={2}>월</th>
+                                        <th rowSpan={2}>일</th>
+                                        <th rowSpan={2}>주</th>
+                                        <th colSpan={2}>시작</th>
+                                        <th colSpan={2}>종료</th>
+                                        <th rowSpan={2}>플랜</th>
+                                        <th rowSpan={2}>FUNCTION</th>
+                                    </tr>
+                                    <tr>
+                                        <th>시</th>
+                                        <th>분</th>
+                                        <th>시</th>
+                                        <th>분</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th>1</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>2</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>3</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>4</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>5</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>6</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>7</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>8</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>9</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>10</th>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>일</option>
-                                                    <option>월</option>
-                                                    <option>화</option>
-                                                    <option>수</option>
-                                                    <option>목</option>
-                                                    <option>금</option>
-                                                    <option>토</option>
-                                                    <option>공휴일</option>
-                                                    <option>모든 주중(월~금)</option>
-                                                    <option>모든 주말(토~일)</option>
-                                                    <option>매월 격주 첫번째 토요일</option>
-                                                    <option>매월 격주 두번째 토요일</option>
-                                                </select>
-                                            </td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td><input type={'number'}/></td>
-                                            <td>
-                                                <select disabled={true}>
-                                                    <option>---</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select>
-                                                    <option>---</option>
-                                                    <option>조광제어</option>
-                                                    <option>점멸제어</option>
-                                                    <option>소등제어</option>
-                                                    <option>시차제어</option>
-                                                    <option>감응제어</option>
-                                                    <option>푸쉬버튼활성</option>
-                                                    <option>음향발생</option>
-                                                    <option>감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>시차+감응+푸쉬</option>
-                                                    <option>PPC제어</option>
-                                                    <option>단독앞막힘제어</option>
-                                                    <option>예약</option>
-                                                </select>
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <th>1</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>2</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>3</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>4</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>5</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>6</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>7</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>8</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>9</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>10</th>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>일</option>
+                                                <option>월</option>
+                                                <option>화</option>
+                                                <option>수</option>
+                                                <option>목</option>
+                                                <option>금</option>
+                                                <option>토</option>
+                                                <option>공휴일</option>
+                                                <option>모든 주중(월~금)</option>
+                                                <option>모든 주말(토~일)</option>
+                                                <option>매월 격주 첫번째 토요일</option>
+                                                <option>매월 격주 두번째 토요일</option>
+                                            </select>
+                                        </td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td><input type={'number'}/></td>
+                                        <td>
+                                            <select disabled={true}>
+                                                <option>---</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select>
+                                                <option>---</option>
+                                                <option>조광제어</option>
+                                                <option>점멸제어</option>
+                                                <option>소등제어</option>
+                                                <option>시차제어</option>
+                                                <option>감응제어</option>
+                                                <option>푸쉬버튼활성</option>
+                                                <option>음향발생</option>
+                                                <option>감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>시차+감응+푸쉬</option>
+                                                <option>PPC제어</option>
+                                                <option>단독앞막힘제어</option>
+                                                <option>예약</option>
+                                            </select>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

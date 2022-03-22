@@ -3,6 +3,7 @@ import Link from "next/link";
 import {DateTimeToString} from "../service/dateToString";
 import { removeCookies } from 'cookies-next';
 import Router from "next/router";
+import swal from "sweetalert2";
 
 function Header(props){
 
@@ -53,10 +54,7 @@ function Header(props){
 
     const logoutEvent =() => {
         removeCookies('Authorization');
-        swal("[Logout]", 'Logout...', "error", {
-            buttons: [false],
-            timer: 2000,
-        }).then((value) => {
+        swal.fire("[Logout]", 'Logout...', "error").then((value) => {
             Router.push('/auth/login')
         })
     }

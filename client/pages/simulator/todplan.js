@@ -11,7 +11,6 @@ const TODPlan = () => {
     const [groupList, setGroupList] = useState([])
     const [groupIndex, setGroupIndex] = useState(1)
     const [mapList, setMapList] = useState([])
-    const [mapIndex, setMapIndex] =useState(1)
 
     const [weekPlan, setWeekPlan] = useState([])
     const [dayPlan, setDayPlan] = useState([])
@@ -90,11 +89,9 @@ const TODPlan = () => {
     }
 
     const updateGroupIndex = (content) => {
-        setGroupIndex(content.target.selectedIndex + 1)
+        setGroupIndex(content.target.value)
     }
-    const updateMapIndex = (content) =>{
-        setMapIndex(content.target.selectedIndex + 1)
-    }
+
     const planIndexList = ['1번', '2번', '3번', '4번', '5번', '6번', '7번', '8번', '9번', '10번']
     const dayPlanTable = () => {
         let trs = []
@@ -178,17 +175,19 @@ const TODPlan = () => {
     }
     const weekPlanUploadEvent = () => {
         setWeekPlan([])
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xAA])
         funcSwal();
     }
     const dayPlanUploadEvent = () => {
-
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         const selectIndex = document.getElementsByClassName('planIndex-view')[0].querySelector('select').selectedIndex
         const planIndex = parseInt(parseInt(selectIndex.toString(2).padStart(4, '0') + '0000', 2).toString(16), 16)
         socket.emit('upload_request', [0x7e, 0x7e, 5, mapIndex, 0xB2, planIndex])
         funcSwal()
     }
     const holidayPlanUploadEvent = () => {
+        const mapIndex = parseInt(document.getElementById('location_id').value)
         socket.emit('upload_request', [0x7e, 0x7e, 4, mapIndex, 0xA6])
         funcSwal()
     }
@@ -203,13 +202,13 @@ const TODPlan = () => {
                         <h4>그룹</h4>
                         <select onChange={updateGroupIndex.bind()}>
                             {groupList.map((item, index)=>(
-                                <option key={'group-list-'+index}>{item.group_id}. {item.group_name}</option>
+                                <option key={'group-list-'+index} value={item.group_id}>{item.group_id}. {item.group_name}</option>
                             ))}
                         </select>
                         <h4>교차로</h4>
-                        <select onChange={updateMapIndex.bind()}>
+                        <select id={'location_id'}>
                             {mapList.filter((e)=>e.group.group_id == groupIndex).map((item, index)=>(
-                                <option key={'map-list-option-'+index}>{item.location_id}번 {item.location_name}</option>
+                                <option key={'map-list-option-'+index} value={item.location_id}>{item.location_id}번 {item.location_name}</option>
                             ))}
                         </select>
                     </div>
@@ -337,7 +336,7 @@ const TODPlan = () => {
                 display: flex;
                 align-items: center;
               }
-               select {
+              select {
                 margin: 0px 5px;
                 border-radius: 4px;
                 color: #707070;
@@ -375,14 +374,14 @@ const TODPlan = () => {
                 font-size: 14px;
               }
               th:not(:last-child), td:not(:last-child){
-                 border-right: 1px solid #EBEBEB;
+                border-right: 1px solid #EBEBEB;
               }
               td{
                 height: 24px;
                 font-size: 14px;
               }
-              .planIndex-view{ 
-                height: 20px; 
+              .planIndex-view{
+                height: 20px;
                 align-items: center;
                 margin-bottom: 20px;
               }

@@ -1,8 +1,6 @@
 import Navigation from "./Navigation";
 import Header from "./Header";
-// import axios from "axios";
 import Login from './../pages/auth/login'
-
 import { useSelector, useDispatch } from "react-redux";
 import { pushItem, deleteItem } from "../service/modules/history";
 
@@ -58,18 +56,4 @@ const Layout = ({children}) => {
 
     </>
 };
-// export async function getServerSideProps(context) {
-//     console.log('getServerSideProps')
-//     const token = await axios.post('http://192.168.1.43:3001/user',{
-//         userId:'superadmin',
-//         password:'xhdtlsqhdks1',
-//         admin: true
-//     })
-//     context.res.setHeader('set-Cookie', `Authorization=${token.data['accessToken']}; HttpOnly`)
-//     return {
-//         props: {
-//             data:{'test':'test'}
-//         }, // will be passed to the page component as props
-//     }
-// }
 export default Layout;

@@ -1,3 +1,7 @@
 
 #NextJS (Client)
 /client/node_modules
+
+#NestJS (Server)
+/server/dist
+/server/node_modules

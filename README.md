@@ -11,11 +11,13 @@ TrafficApp
 
 ```
 cd client && npm install
+npm run dev
 ```
 
 And 
 
 ```
 cd server && npm install
+npm run start:dev
 ```
 

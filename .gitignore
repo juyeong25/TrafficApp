@@ -1,7 +1,11 @@
 
 #NextJS (Client)
 /client/node_modules
+#/client/*lock.json
 
 #NestJS (Server)
 /server/dist
 /server/node_modules
+
+#idea
+.idea
